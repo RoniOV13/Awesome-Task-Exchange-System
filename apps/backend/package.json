@@ -23,10 +23,12 @@
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/microservices": "^9.1.2",
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.2",
     "class-validator": "^0.13.2",
+    "kafkajs": "^2.2.0",
     "mongoose": "^6.6.1",
     "mongoose-autopopulate": "^0.16.1",
     "reflect-metadata": "^0.1.13",
