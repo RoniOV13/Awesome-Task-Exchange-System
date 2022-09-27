@@ -32,15 +32,15 @@ services:
     depends_on:
       - zookeeper
 
-  backend:
+  task:
     build:
-      context: ./apps/backend/
+      context: ./apps/task/
       dockerfile: Dockerfile
     environment:
       NODE_ENV: "development"
       PORT: 3000
     volumes:
-      - ./apps/backend/:/app
+      - ./apps/task/:/app
       - /app/node_modules
       - /app/dist
     depends_on:
@@ -48,6 +48,60 @@ services:
       - mongodb
     ports:
       - 3000:3000
+    command: npm run start
+
+  auth:
+    build:
+      context: ./apps/auth/
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: "development"
+      PORT: 3001
+    volumes:
+      - ./apps/auth/:/app
+      - /app/node_modules
+      - /app/dist
+    depends_on:
+      - kafka
+      - mongodb
+    ports:
+      - 3001:3001
+    command: npm run start
+
+  analytics:
+    build:
+      context: ./apps/analytics/
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: "development"
+      PORT: 3003
+    volumes:
+      - ./apps/analytics/:/app
+      - /app/node_modules
+      - /app/dist
+    depends_on:
+      - kafka
+      - mongodb
+    ports:
+      - 3003:3003
+    command: npm run start
+
+  accouting:
+    build:
+      context: ./apps/accouting/
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: "development"
+      PORT: 3002
+    volumes:
+      - ./apps/accouting/:/app
+      - /app/node_modules
+      - /app/dist
+    depends_on:
+      - kafka
+      - mongodb
+    ports:
+      - 3002:3002
     command: npm run start
 
 volumes:

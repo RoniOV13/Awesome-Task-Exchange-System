@@ -10,9 +10,9 @@ COPY . /app
 
 RUN yarn build
 
-ENV NODE_ENV dev
-ENV PORT 3000
-ENV NUXT_PORT 3000
-ENV NEST_PORT 3000
+ENV NODE_ENV development
+ENV PORT 3001
+ENV NUXT_PORT 3001
+ENV NEST_PORT 3001
 
 CMD ["node", "dist/main.js"]
