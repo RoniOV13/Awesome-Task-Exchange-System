@@ -4,6 +4,14 @@ networks:
   webnet:
     driver: bridge
 
+volumes:
+  mongodb_data:
+    driver: local
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+
 services:
   mongodb:
     image: docker.io/bitnami/mongodb:5.0
@@ -11,26 +19,52 @@ services:
       - "27017:27017"
     volumes:
       - 'mongodb_data:/bitnami/mongodb'
+    networks:
+      - webnet
 
   zookeeper:
-    image: docker.io/bitnami/zookeeper:3.8
+    image: 'docker.io/bitnami/zookeeper:3.7-debian-11'
     ports:
-      - "2181:2181"
-    volumes:
-      - "zookeeper_data:/bitnami"
+      - 2181:2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - webnet
+
   kafka:
-    image: docker.io/bitnami/kafka:3.2
+    image: 'docker.io/bitnami/kafka:3.1-debian-11'
     ports:
-      - "9092:9092"
-    volumes:
-      - "kafka_data:/bitnami"
+      - 9092:9092
+      - 9093:9093
+      - 9094:9094
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,LOCALHOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093,LOCALHOST://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093,LOCALHOST://127.0.0.1:9094
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
+    networks:
+      - webnet
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 9090:8080
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    logging:
+      driver: none
+    networks:
+      - webnet
 
   task:
     build:
@@ -46,6 +80,8 @@ services:
     depends_on:
       - kafka
       - mongodb
+    networks:
+      - webnet
     ports:
       - 3000:3000
     command: npm run start
@@ -66,6 +102,8 @@ services:
       - mongodb
     ports:
       - 3001:3001
+    networks:
+      - webnet
     command: npm run start
 
   analytics:
@@ -84,6 +122,8 @@ services:
       - mongodb
     ports:
       - 3003:3003
+    networks:
+      - webnet
     command: npm run start
 
   accouting:
@@ -102,12 +142,6 @@ services:
       - mongodb
     ports:
       - 3002:3002
+    networks:
+      - webnet
     command: npm run start
-
-volumes:
-  mongodb_data:
-    driver: local
-  zookeeper_data:
-    driver: local
-  kafka_data:
-    driver: local
