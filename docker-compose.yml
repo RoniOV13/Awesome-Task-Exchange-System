@@ -106,42 +106,42 @@ services:
       - webnet
     command: npm run start
 
-  analytics:
-    build:
-      context: ./apps/analytics/
-      dockerfile: Dockerfile
-    environment:
-      NODE_ENV: "development"
-      PORT: 3003
-    volumes:
-      - ./apps/analytics/:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      - kafka
-      - mongodb
-    ports:
-      - 3003:3003
-    networks:
-      - webnet
-    command: npm run start
+  # analytics:
+  #   build:
+  #     context: ./apps/analytics/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NODE_ENV: "development"
+  #     PORT: 3003
+  #   volumes:
+  #     - ./apps/analytics/:/app
+  #     - /app/node_modules
+  #     - /app/dist
+  #   depends_on:
+  #     - kafka
+  #     - mongodb
+  #   ports:
+  #     - 3003:3003
+  #   networks:
+  #     - webnet
+  #   command: npm run start
 
-  accouting:
-    build:
-      context: ./apps/accouting/
-      dockerfile: Dockerfile
-    environment:
-      NODE_ENV: "development"
-      PORT: 3002
-    volumes:
-      - ./apps/accouting/:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      - kafka
-      - mongodb
-    ports:
-      - 3002:3002
-    networks:
-      - webnet
-    command: npm run start
+  # accouting:
+  #   build:
+  #     context: ./apps/accouting/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NODE_ENV: "development"
+  #     PORT: 3002
+  #   volumes:
+  #     - ./apps/accouting/:/app
+  #     - /app/node_modules
+  #     - /app/dist
+  #   depends_on:
+  #     - kafka
+  #     - mongodb
+  #   ports:
+  #     - 3002:3002
+  #   networks:
+  #     - webnet
+  #   command: npm run start
