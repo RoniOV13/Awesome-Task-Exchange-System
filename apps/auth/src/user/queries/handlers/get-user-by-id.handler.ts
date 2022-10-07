@@ -15,7 +15,6 @@ export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
   ) {}
 
   async execute(query: GetUserByIdQuery) {
-    console.log(clc.yellowBright('Async GetUserByIdQuery...'));
     return this.repository.findOneById(query.id);
   }
 }

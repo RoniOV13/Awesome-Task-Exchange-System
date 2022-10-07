@@ -41,12 +41,13 @@ export class UserController {
     return this.commandBus.execute(new ChangeRoleCommand(changeRoleDto));
   }
 
-  @Get()
+  @Get('get-users')
   async findAll() {
+    console.log('dweqdwe')
     return this.queryBus.execute(new GetAllUsersQuery());
   }
 
-  @Get(':id')
+  @Get('get-user/:id')
   findOne(@Param('id') id: string) {
     return this.queryBus.execute(new GetUserByIdQuery(id));
   }

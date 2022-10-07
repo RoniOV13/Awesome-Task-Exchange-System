@@ -49,8 +49,7 @@ export class User extends AggregateRoot {
   }
 
   updateUser(id: string, dto: UpdateUserDto) {
-    const createdAt = new Date(Date.now()).toISOString(),
-      updatedAt = new Date(Date.now()).toISOString();
+    const  updatedAt = new Date(Date.now()).toISOString();
   
     this.apply(
       new UserUpdatedEvent(
@@ -58,7 +57,6 @@ export class User extends AggregateRoot {
         dto.username,
         dto.email,
         dto.password,
-        createdAt,
         updatedAt,
       ),
     );

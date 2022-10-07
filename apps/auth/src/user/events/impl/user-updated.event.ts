@@ -9,7 +9,6 @@ export class UserUpdatedEvent extends StorableEvent {
     public readonly username: string,
     public readonly email: string,
     public readonly password: string,
-    public readonly createdAt: string,
     public readonly updatedAt: string,
   ) {
     super();

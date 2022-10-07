@@ -8,7 +8,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     MongooseModule.forRoot(
-      `mongodb://mongodb:27017`,
+      `mongodb://mongodb:27017/task-tracker`,
     ),
     ClientsModule.register([
       {

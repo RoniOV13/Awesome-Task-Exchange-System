@@ -13,7 +13,6 @@ export class GetAllUsersHandler implements IQueryHandler<GetAllUsersQuery> {
   ) { }
 
   async execute(query: GetAllUsersQuery): Promise<any[]> {
-    console.log(clc.yellowBright('Async GetAllUsersQuery...'));
     const defaultParams = {
       createdAt: -1
     }

@@ -4,25 +4,15 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginGuard } from './login.guard';
 import { Issuer } from 'openid-client';
 import { ApiTags } from '@nestjs/swagger';
-import { CommandBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from 'src/user/commands/impl/create-user.command';
-
+ 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(
-    private readonly commandBus: CommandBus,
-  ) {}
 
   @UseGuards(LoginGuard)
   @Get('/login')
   login() {}
 
-  @UseGuards(LoginGuard)
-  @Get('/register')
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.commandBus.execute(new CreateUserCommand(createUserDto));
-  }
 
   @Get('/user')
   user(@Request() req) {
@@ -30,7 +20,7 @@ export class AuthController {
   }
 
   @UseGuards(LoginGuard)
-  @Get('/callback')
+  @Get('/google/redirect')
   loginCallback(@Res() res: Response) {
     res.redirect('/');
   }
