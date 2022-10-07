@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EventSourcingModule } from 'src/event-sourcing';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { UserSchema } from './schema/user.schema';
+import { UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
