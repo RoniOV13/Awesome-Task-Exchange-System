@@ -8,20 +8,21 @@ export class ChangeRoleHandler implements ICommandHandler<ChangeRoleCommand> {
   constructor(
     private readonly repository: UserRepository,
     private readonly eventBus: StoreEventBus,
-    private readonly eventPublicher: StoreEventPublisher
   ) { }
 
   async execute(command: ChangeRoleCommand) {
     console.log('ChangeRoleUserCommand...');
 
-    let user = await this.repository.findOneById(command.changeRole.userId)
-    
-    user.role = command.changeRole.role
+    let user = await this.repository.findOneById(command.id)
+   
+    user.changeRole(command)
+
+    // user.role = command.role
 
     this.eventBus.publishAll(user.getUncommittedEvents());
-
+    console.log('userUpdate', user)
     await user.commit();
 
-    return user;
+    return command.id;
   }
 }

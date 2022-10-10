@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(`mongodb://mongodb:27017/dataBase`),
+    MongooseModule.forRoot(`mongodb://mongodb:27017/auth`),
     EventSourcingModule.forRoot({
       mongoURL: `mongodb://mongodb:27017/auth`,
       connectOptions: { },

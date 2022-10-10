@@ -8,14 +8,14 @@ import {
   
   export class changeRoleDto {
     @ApiProperty({
-      example: 'admin',
+      example: '9da2d0be-d695-44cc-84e4-141eb19ae03e',
       format: 'string',
       minLength: 1,
       maxLength: 255,
     })
     @IsNotEmpty()
     @IsString()
-    readonly userId: string;
+    readonly id: string;
 
 
     @ApiProperty({

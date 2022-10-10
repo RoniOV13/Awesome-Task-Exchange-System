@@ -1,17 +1,16 @@
 import { IEventHandler } from '@nestjs/cqrs';
 import { EventsHandler } from '@nestjs/cqrs/dist/decorators/events-handler.decorator';
 import { TaskCompletedEvent } from '../impl/task-completed.event';
+import { TaskAdapter } from 'src/task-tracker/adapters/task-tracker.adapters';
 
 @EventsHandler(TaskCompletedEvent)
 export class TaskCompletedHandler implements IEventHandler<TaskCompletedEvent> {
-  constructor(
-  ) { }
+  constructor(private readonly taskAdapter: TaskAdapter) {}
 
   handle(event: TaskCompletedEvent) {
-   
-    console.log(
-      JSON.stringify(event, null, 2),
-    );
+    this.taskAdapter.completeTask(event);
   }
 }
+
+
 

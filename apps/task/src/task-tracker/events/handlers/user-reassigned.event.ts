@@ -1,17 +1,15 @@
 import { IEventHandler } from '@nestjs/cqrs';
 import { EventsHandler } from '@nestjs/cqrs/dist/decorators/events-handler.decorator';
-import { UserReassignedEvent } from '../impl/user-reassigned.event';
+import { ReassignedEvent } from '../impl/reassigned.event';
+import { TaskAdapter } from 'src/task-tracker/adapters/task-tracker.adapters';
 
-@EventsHandler(UserReassignedEvent)
-export class UserReassignedHandler implements IEventHandler<UserReassignedEvent> {
-  constructor(
-  ) { }
+@EventsHandler(ReassignedEvent)
+export class UserReassignedHandler
+  implements IEventHandler<ReassignedEvent>
+{
+  constructor(private readonly taskAdapter: TaskAdapter) {}
 
-  handle(event: UserReassignedEvent) {
-   
-    console.log(
-      JSON.stringify(event, null, 2),
-    );
+  handle(event: ReassignedEvent) {
+    this.taskAdapter.reassignUser(event);
   }
 }
-

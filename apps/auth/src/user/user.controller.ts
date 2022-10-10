@@ -38,12 +38,11 @@ export class UserController {
 
   @Post('change-role')
   async changeRole(@Body() changeRoleDto: changeRoleDto) {
-    return this.commandBus.execute(new ChangeRoleCommand(changeRoleDto));
+    return this.commandBus.execute(new ChangeRoleCommand(changeRoleDto.id, changeRoleDto.role));
   }
 
   @Get('get-users')
   async findAll() {
-    console.log('dweqdwe')
     return this.queryBus.execute(new GetAllUsersQuery());
   }
 

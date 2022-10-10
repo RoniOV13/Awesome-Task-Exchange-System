@@ -9,7 +9,7 @@ import { CommandHandlers } from './commands/handlers';
 import { EventHandlers } from './events/handlers';
 import { QueryHandlers } from './queries/handlers';
 import { StateUpdaters } from './events/updaters';
-import { getKafkaModuleConfig, UserProviderAdapter } from './adapters/user-provider.adapter';
+import { getKafkaModuleConfig, UserAdapter } from './adapters/user.adapter';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -43,7 +43,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 
   controllers: [UserController],
   providers: [
-    UserProviderAdapter,
+    UserAdapter,
     UserRepository,
     ...CommandHandlers,
     ...EventHandlers,

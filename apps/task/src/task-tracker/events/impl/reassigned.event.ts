@@ -1,6 +1,6 @@
 import { StorableEvent } from 'src/event-sourcing';
 
-export class UserReassignedEvent extends StorableEvent {
+export class ReassignedEvent extends StorableEvent {
   eventAggregate = 'task';
   eventVersion = 1;
 

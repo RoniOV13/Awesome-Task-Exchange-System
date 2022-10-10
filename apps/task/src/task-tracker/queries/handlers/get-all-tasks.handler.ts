@@ -5,13 +5,13 @@ import { TaskTrackerSchema } from 'src/task-tracker/schemas/task-tracker.schema'
 import { GetTasksQuery } from '../impl/get-all-task.query'
 
 @QueryHandler(GetTasksQuery)
-export class GetPaymentsHandler {
+export class GetTasksHandler {
   constructor(
     @InjectModel(TaskTrackerSchema.name)
     private readonly model: Model<TaskTrackerSchema>,
   ) { }
 
-  async execute({ query, select, params }: GetTasksQuery): Promise<unknown[]> {
+  async execute(query: GetTasksQuery)  {
     // @ts-ignore
     return await this.model.find(query, { ...select, _id: 0 }, params)
   }

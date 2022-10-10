@@ -6,8 +6,8 @@ import { Model } from 'mongoose';
 import { NotFoundException } from '@nestjs/common';
 import { CreateTaskCommand } from '../impl/create-task.handler';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
-import { UserSchema } from 'src/user/schemas/user.schema';
 import { Task } from 'src/task-tracker/models/task.model';
+import { UserRepository } from 'src/user/user.repository';
 
 @CommandHandler(CreateTaskCommand)
 export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
@@ -15,8 +15,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
     private readonly repository: TaskRepository,
     private readonly eventBus: StoreEventBus,
     private readonly eventPublicher: StoreEventPublisher,
-    @InjectModel('User')
-    private readonly model: Model<UserSchema>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async execute(command: CreateTaskCommand) {
@@ -24,15 +23,22 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
 
     const id = uuid();
 
-    const users = await this.model.find({ role: 'employee' });
+    const users = await this.userRepository.findAll({ role: 'employee' });
 
     if (!users.length) {
-      throw new NotFoundException('Задача не может быть создана из-за отстуствия исполнителя');
+      throw new NotFoundException(
+        'Задача не может быть создана из-за отстуствия исполнителя',
+      );
     }
     const task = new Task(id);
 
     task.createTask(command.dto);
 
+    let employee = users[Math.floor(Math.random() * users.length)];
+
+    task.assigne = employee.id;
+    
+    console.log('task.',task )
     this.eventBus.publishAll(task.getUncommittedEvents());
 
     await task.commit();

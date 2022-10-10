@@ -1,6 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
-import clc from 'cli-color';
 import { Model } from 'mongoose';
 import { User } from 'src/user/schemas/user.schema';
 import { GetAllUsersQuery } from '../impl/get-all-users.query';

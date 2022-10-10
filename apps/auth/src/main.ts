@@ -12,7 +12,7 @@ async function bootstrap() {
   // Authentication & Session
   app.use(
     session({
-      store: MongoStore.create({ mongoUrl: 'mongodb://mongodb:27017/dataBase' }), // where session will be stored
+      store: MongoStore.create({ mongoUrl: 'mongodb://mongodb:27017/auth' }), // where session will be stored
       secret: process.env.SESSION_SECRET, // to sign session id
       resave: false, // will default to false in near future: https://github.com/expressjs/session#resave
       saveUninitialized: false, // will default to false in near future: https://github.com/expressjs/session#saveuninitialized

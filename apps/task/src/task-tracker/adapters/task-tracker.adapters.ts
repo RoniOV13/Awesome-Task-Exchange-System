@@ -1,15 +1,16 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import {
-  CREATE_USER_TOPIC,
-  UPDATE_USER_TOPIC,
-  CHANGE_ROLE_TOPIC,
+  CREATE_TASK_TOPIC,
+  UPDATE_UPDATE_TOPIC,
+  COMPLETE_TASK_TOPIC,
+  REASSIGN_USER_TOPIC,
 } from 'src/common/kafka/kafka-topics';
-export const KAKFA_CLIENT_SYMBOL = Symbol('AUTH_SERVICE');
+export const KAKFA_CLIENT_SYMBOL = Symbol('TASK_TRACKER_SERVICE');
 
 export function getKafkaModuleConfig(
-  clientId = 'auth',
-  groupId = 'auth-consumer',
+  clientId = 'task-tracker',
+  groupId = 'task-tracker-consumer',
 ) {
   const config = {
     name: KAKFA_CLIENT_SYMBOL,
@@ -31,8 +32,8 @@ export function getKafkaModuleConfig(
 }
 
 @Injectable()
-export class UserProviderAdapter implements OnModuleInit {
-  readonly #logger = new Logger('AUTH_SERVICE');
+export class TaskAdapter implements OnModuleInit {
+  readonly #logger = new Logger('TASK_TRACKER_SERVICE');
 
   constructor(@Inject(KAKFA_CLIENT_SYMBOL) readonly kafka: ClientKafka) {}
 
@@ -48,26 +49,19 @@ export class UserProviderAdapter implements OnModuleInit {
     await this.kafka.close();
   }
 
-  async createUser(message: any): Promise<void> {
-    this.kafka.emit(CREATE_USER_TOPIC, {
-      id: message.id,
-      username: message.username,
-      email: message.email,
-    });
+  async createTask(message: any): Promise<void> {
+    this.kafka.emit(CREATE_TASK_TOPIC, message);
   }
 
-  async updateUser(message: any): Promise<void> {
-    this.kafka.emit(UPDATE_USER_TOPIC, {
-      id: message.id,
-      username: message.username,
-      email: message.email,
-    });
+  async updateTask(message: any): Promise<void> {
+    this.kafka.emit(UPDATE_UPDATE_TOPIC, message);
   }
 
-  async changeRole(message: any): Promise<void> {
-    this.kafka.emit(CHANGE_ROLE_TOPIC, {
-      id: message.id,
-      role:message.role
-    });
+  async completeTask(message: any): Promise<void> {
+    this.kafka.emit(COMPLETE_TASK_TOPIC, message);
+  }
+
+  async reassignUser(message: any): Promise<void> {
+    this.kafka.emit(REASSIGN_USER_TOPIC, message);
   }
 }

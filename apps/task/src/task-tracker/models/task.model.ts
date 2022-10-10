@@ -23,7 +23,6 @@ export class Task extends AggregateRoot {
   onTaskCreatedEvent(event: TaskCreatedEvent) {
     this.title = event.title;
     this.description = event.description;
-    // this.assigne = event.assigne;
     this.createdAt = event.createdAt;
     this.updatedAt = event.createdAt;
   }
@@ -37,7 +36,6 @@ export class Task extends AggregateRoot {
         this.id,
         dto.title,
         dto.description,
-        // dto.assigne,
         createdAt,
         updatedAt,
       ),

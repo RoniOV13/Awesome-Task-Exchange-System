@@ -1,4 +1,4 @@
-export class ReassignTaskCommand {
+export class ReassignUserCommand {
   constructor(
     public readonly id: string,
   ) { }

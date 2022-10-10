@@ -1,36 +1,31 @@
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { StoreEventBus, StoreEventPublisher } from 'src/event-sourcing';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
 import { UserSchema } from 'src/user/schemas/user.schema';
-import { ReassignTaskCommand } from '../impl/reassign-user.command';
+import { UserRepository } from 'src/user/user.repository';
+import { ReassignUserCommand } from '../impl/reassign-user.command';
 
-@CommandHandler(ReassignTaskCommand)
-export class ReassignTaskHandler
-  implements ICommandHandler<ReassignTaskCommand>
+@CommandHandler(ReassignUserCommand)
+export class ReassignUserHandler
+  implements ICommandHandler<ReassignUserCommand>
 {
   constructor(
     private readonly repository: TaskRepository,
     private readonly eventBus: StoreEventBus,
-    private readonly eventPublicher: StoreEventPublisher,
+    private readonly userRepository: UserRepository,
     @InjectModel('User')
     private readonly model: Model<UserSchema>,
   ) {}
-  async execute(command: ReassignTaskCommand) {
+  async execute(command: ReassignUserCommand) {
     console.log('ReassigneUserCommand...');
-    const users = await this.model.find({ role: 'employee' });
+    
+    const users = await this.userRepository.findAll({ role: 'employee' });
 
     const task = await this.repository.findOneById(command.id);
 
     const listEmployee = users.filter((user) => user.id !== task.assigne);
-
-    if (!listEmployee.length) {
-      throw new NotFoundException(
-        'Задача не может быть создана из-за отстуствия исполнителя',
-      );
-    }
 
     let employee =
       listEmployee[Math.floor(Math.random() * listEmployee.length)];

@@ -1,8 +1,10 @@
+import { UserModule } from './user/user.module';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TaskModule } from './task-tracker/task-tracker.module';
+import { EventSourcingModule } from './event-sourcing';
 
 
 @Module({
@@ -10,6 +12,15 @@ import { AppService } from './app.service';
     MongooseModule.forRoot(
       `mongodb://mongodb:27017/task-tracker`,
     ),
+    EventSourcingModule.forRoot({
+      mongoURL: `mongodb://mongodb:27017/task-tracker`,
+      connectOptions: { },
+      collectionsOptions: {
+        eventsCollectionName: 'event-store',
+        snapshotsCollectionName: 'event-snapshots',
+        transactionsCollectionName: 'event-transactions',
+      },
+    }),
     ClientsModule.register([
       {
         name: 'TASK_TRACKER_SERVICE',
@@ -25,8 +36,10 @@ import { AppService } from './app.service';
         },
       },
     ]),
+    UserModule,
+    TaskModule
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}

@@ -3,13 +3,15 @@ import mongoose, { Document } from 'mongoose';
 import { isUUID } from 'class-validator';
 import { UserSchema } from 'src/user/schemas/user.schema';
 
-@Schema({
+
+export const taskSchemaParams = {
   timestamps: true,
   versionKey: false,
-  toJSON: {
-    virtuals: true,
-  },
-})
+  collection: 'tasks',
+}
+
+const SchemaTypes = mongoose.Schema.Types
+@Schema(taskSchemaParams)
 export class TaskTrackerSchema extends Document {
   @Prop({
     type: String,

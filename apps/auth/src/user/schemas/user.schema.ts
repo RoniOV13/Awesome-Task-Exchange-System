@@ -55,10 +55,6 @@ const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.plugin(require('mongoose-autopopulate'));
 
-// UserSchema.virtual('id').get(function (this: User) {
-//   return this._id;
-// });
-
 UserSchema.pre('save', async function (next) {
   try {
     if (!this.isModified('password')) {

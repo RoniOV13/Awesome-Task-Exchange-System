@@ -1,16 +1,24 @@
+import { TaskTrackerController } from './task-tracker.controller';
+import { TaskRepository } from './repository/task-tracker.repository';
+import { getKafkaModuleConfig, TaskAdapter } from './adapters/task-tracker.adapters';
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
 import { EventSourcingModule } from 'src/event-sourcing';
-import { CqrsModule } from '@nestjs/cqrs';
+import { CommandHandler, CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TaskTrackerSchema } from './schemas/task-tracker.schema';
+import { CommandHandlers } from './commands/handlers';
+import { EventHandlers } from './events/handlers';
+import { QueryHandlers } from './queries/handlers';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: 'TaskTracker', schema: TaskTrackerSchema, collection: 'task-tracker' },
+      { name: TaskTrackerSchema.name, schema: SchemaFactory.createForClass(TaskTrackerSchema)},
     ]),
     CqrsModule,
+    getKafkaModuleConfig(),
     ClientsModule.register([
       {
         name: 'TASK_TRACKER_SERVICE',
@@ -29,14 +37,18 @@ import { TaskTrackerSchema } from './schemas/task-tracker.schema';
         },
       },
     ]),
-
+    UserModule,
     EventSourcingModule.forFeature(),
   ],
 
-  controllers: [],
+  controllers: [TaskTrackerController],
   providers: [
-
+  TaskAdapter,
+  TaskRepository,
+  ...CommandHandlers,
+  ...EventHandlers,
+  ...QueryHandlers,
   ],
   exports: [],
 })
-export class UserModule {}
+export class TaskModule {}

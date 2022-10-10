@@ -4,7 +4,7 @@ import { GetTaskByIdQuery } from '../impl/get-task-by-id.query'
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository'
 
 @QueryHandler(GetTaskByIdQuery)
-export class GetPaymentByIdHandler {
+export class GetTaskByIdHandler {
   constructor(private readonly taskRepository: TaskRepository) {}
 
   async execute({ id }: GetTaskByIdQuery): Promise<unknown> {

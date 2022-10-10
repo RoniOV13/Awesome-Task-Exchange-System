@@ -20,6 +20,13 @@ import {
     @MinLength(2)
     @MaxLength(255)
     readonly username: string;
+
+    @ApiProperty({
+      example: 'employee',
+      format: 'string',
+    })
+    @IsString()
+    readonly role: string;
   
  
     @ApiProperty({
