@@ -4,7 +4,7 @@ import { TaskRepository } from 'src/task-tracker/repository/task-tracker.reposit
 import { UpdateTaskCommand } from '../impl/update-task.command';
 
 @CommandHandler(UpdateTaskCommand)
-export class UpdateUserHandler implements ICommandHandler<UpdateTaskCommand> {
+export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
   constructor(
     private readonly repository: TaskRepository,
     private readonly eventBus: StoreEventBus,

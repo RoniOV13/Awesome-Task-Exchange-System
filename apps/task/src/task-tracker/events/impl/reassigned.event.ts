@@ -6,6 +6,8 @@ export class ReassignedEvent extends StorableEvent {
 
   constructor(
     public readonly id: string,
+    public readonly assigne: string,
+    public readonly updatedAt: string,
   ) {
     super();
   }

@@ -32,13 +32,11 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
     }
     const task = new Task(id);
 
-    task.createTask(command.dto);
-
     let employee = users[Math.floor(Math.random() * users.length)];
-
-    task.assigne = employee.id;
-    
-    console.log('task.',task )
+   
+    task.createTask(command.dto, employee.id);
+     
+    console.log('task', task)
     this.eventBus.publishAll(task.getUncommittedEvents());
 
     await task.commit();

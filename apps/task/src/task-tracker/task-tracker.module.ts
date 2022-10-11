@@ -11,6 +11,7 @@ import { CommandHandlers } from './commands/handlers';
 import { EventHandlers } from './events/handlers';
 import { QueryHandlers } from './queries/handlers';
 import { UserModule } from 'src/user/user.module';
+import { StateUpdaters } from './events/updaters';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { UserModule } from 'src/user/user.module';
   ...CommandHandlers,
   ...EventHandlers,
   ...QueryHandlers,
+  ...StateUpdaters
   ],
   exports: [],
 })

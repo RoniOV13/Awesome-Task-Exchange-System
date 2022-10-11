@@ -15,7 +15,7 @@ export class CompleteTaskHandler implements ICommandHandler<CompleteTaskCommand>
  
     const task = await this.repository.findOneById(command.id);
 
-    task.isOpen = false
+    task.completeTask(command.id)
 
     this.eventBus.publishAll(task.getUncommittedEvents());
 

@@ -17,7 +17,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { CreateTaskCommand } from './commands/impl/create-task.handler';
 import { UpdateTaskCommand } from './commands/impl/update-task.command';
 import { CompleteTaskCommand } from './commands/impl/complete-task.handler';
-import { ReassignUserCommand } from './commands/impl/reassign-user.command';
+import { ReassignCommand } from './commands/impl/reassign.command';
 import { GetTasksQuery } from './queries/impl/get-all-task.query';
 import { QueryOptions } from 'mongoose';
 import usePagination from 'src/helpers/usePagination';
@@ -38,7 +38,7 @@ export class TaskTrackerController {
     return this.commandBus.execute(new CreateTaskCommand(createTaskDto));
   }
 
-  @Post('/complete-task/:id')
+  @Get('/complete-task/:id')
   async completeTask(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.commandBus.execute(new CompleteTaskCommand(id));
   }
@@ -73,9 +73,9 @@ export class TaskTrackerController {
     return this.queryBus.execute(new GetTaskByIdQuery(id));
   }
 
-  @Post('/reassign/:id')
-  async reassign(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.commandBus.execute(new ReassignUserCommand(id));
+  @Get('/user/reassign')
+  async reassign() {
+    return this.commandBus.execute(new ReassignCommand());
   }
 
   @Put(':id')

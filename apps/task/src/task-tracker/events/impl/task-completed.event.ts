@@ -5,7 +5,8 @@ export class TaskCompletedEvent extends StorableEvent {
   eventVersion = 1;
 
   constructor(
-    public readonly id: string
+    public readonly id: string,
+    public readonly updatedAt: string
   ) {
     super();
   }

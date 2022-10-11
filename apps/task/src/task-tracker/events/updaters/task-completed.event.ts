@@ -14,9 +14,10 @@ export class TaskCompletedUpdater implements IViewUpdater<TaskCompletedEvent> {
   ) {}
 
   async handle(event: TaskCompletedEvent) {
+    console.log("handle", event)
     await this.model.findOneAndUpdate(
       { id: event.id },
-      { $set: { isOpen: true } },
+      { $set: { isOpen: false } },
     );
   }
 }

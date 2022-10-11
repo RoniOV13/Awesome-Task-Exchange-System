@@ -1,6 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
+import { ReassignedEvent } from '../events/impl/reassigned.event';
+import { TaskCompletedEvent } from '../events/impl/task-completed.event';
 import { TaskCreatedEvent } from '../events/impl/task-created.event';
 import { TaskUpdatedEvent } from '../events/impl/task-updated.event';
 
@@ -23,11 +25,12 @@ export class Task extends AggregateRoot {
   onTaskCreatedEvent(event: TaskCreatedEvent) {
     this.title = event.title;
     this.description = event.description;
+    this.assigne = event.assigne;
     this.createdAt = event.createdAt;
     this.updatedAt = event.createdAt;
   }
 
-  createTask(dto: CreateTaskDto) {
+  createTask(dto: CreateTaskDto, assigne: string) {
     const createdAt = new Date(Date.now()).toISOString(),
       updatedAt = new Date(Date.now()).toISOString();
 
@@ -36,7 +39,29 @@ export class Task extends AggregateRoot {
         this.id,
         dto.title,
         dto.description,
+        assigne,
         createdAt,
+        updatedAt,
+      ),
+    );
+  }
+
+ completeTask(id: string) {
+    const updatedAt = new Date(Date.now()).toISOString();
+    this.apply(
+      new TaskCompletedEvent(
+        id,
+        updatedAt,
+      ),
+    );
+  }
+
+ reassign(id: string, assigne: string) {
+    const updatedAt = new Date(Date.now()).toISOString();
+    this.apply(
+      new ReassignedEvent(
+        id,
+        assigne,
         updatedAt,
       ),
     );

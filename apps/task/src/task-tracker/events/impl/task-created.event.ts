@@ -8,6 +8,7 @@ export class TaskCreatedEvent extends StorableEvent {
     public readonly id: string,
     public readonly title: string,
     public readonly description: string,
+    public readonly assigne: string,
     public readonly createdAt: string,
     public readonly updatedAt: string,
   ) {

@@ -17,7 +17,7 @@ implements IViewUpdater<ReassignedEvent>
 
   
   async handle(event: ReassignedEvent) {
-    console.log('ReassignedEvent', event)
-    // await this.model.findOneAndUpdate({ id: event.id }, {$set: {assigne: event.assigne}});
+    console.log("ressigne",event )
+   await this.model.findOneAndUpdate({ id: event.id }, {$set: {assigne: event.assigne}});
 }
 }
