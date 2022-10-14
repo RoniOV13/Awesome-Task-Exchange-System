@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../models/user.model';
-import { EventStore } from 'src/event-sourcing';
+import { EventStore } from '@libs/event-sourcing';
 
 @Injectable()
 export class UserRepository {
@@ -10,7 +10,6 @@ export class UserRepository {
     const user = new User(id);
     const events = await this.eventStore.getEvents('user', id);
     user.loadFromHistory(events);
-    console.log(events);
     return user;
   }
 } 

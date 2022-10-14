@@ -8,7 +8,18 @@ export class TaskCreatedHandler implements IEventHandler<TaskCreatedEvent> {
   constructor(private readonly taskAdapter: TaskAdapter) {}
 
   handle(event: TaskCreatedEvent) {
-    this.taskAdapter.createTask(event);
+    this.taskAdapter.createTask({
+      eventName:'TaskCreated',
+      eventVersion: 1,
+      eventTime: new Date(Date.now()).toISOString(),
+      producer: 'task_service',
+      payload: {
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        assigne: event.assigne,
+      }
+    });
   }
 }
 

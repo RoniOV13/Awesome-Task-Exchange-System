@@ -1,5 +1,5 @@
-  export const CREATE_USER_TOPIC = 'user.created'
-  export const UPDATE_USER_TOPIC = 'user.updated'
-  export const CHANGE_ROLE_TOPIC = 'user.changed-role'
+export declare const USER_STREAM_TOPIC = "user-stream";
+export declare const USER_TOPIC = "user";
+
 
     

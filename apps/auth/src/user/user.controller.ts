@@ -32,7 +32,6 @@ export class UserController {
 
   @Post('create-user')
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log('create-user')
     return this.commandBus.execute(new CreateUserCommand(createUserDto));
   }
 
@@ -41,12 +40,7 @@ export class UserController {
     return this.commandBus.execute(new ChangeRoleCommand(changeRoleDto.id, changeRoleDto.role));
   }
 
-  @Get('get-users')
-  async findAll() {
-    return this.queryBus.execute(new GetAllUsersQuery());
-  }
-
-  @Get('get-user/:id')
+  @Get('/get-user-by-id/:id')
   findOne(@Param('id') id: string) {
     return this.queryBus.execute(new GetUserByIdQuery(id));
   }

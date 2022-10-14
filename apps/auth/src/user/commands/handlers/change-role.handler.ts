@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { StoreEventBus, StoreEventPublisher } from 'src/event-sourcing';
+import { StoreEventBus, StoreEventPublisher } from '@libs/event-sourcing';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { ChangeRoleCommand } from '../impl/change-role.command';
 
@@ -11,16 +11,12 @@ export class ChangeRoleHandler implements ICommandHandler<ChangeRoleCommand> {
   ) { }
 
   async execute(command: ChangeRoleCommand) {
-    console.log('ChangeRoleUserCommand...');
-
-    let user = await this.repository.findOneById(command.id)
+    const user = await this.repository.findOneById(command.id)
    
     user.changeRole(command)
 
-    // user.role = command.role
-
     this.eventBus.publishAll(user.getUncommittedEvents());
-    console.log('userUpdate', user)
+
     await user.commit();
 
     return command.id;

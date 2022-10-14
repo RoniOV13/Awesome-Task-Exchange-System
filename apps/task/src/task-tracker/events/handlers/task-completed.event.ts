@@ -8,7 +8,15 @@ export class TaskCompletedHandler implements IEventHandler<TaskCompletedEvent> {
   constructor(private readonly taskAdapter: TaskAdapter) {}
 
   handle(event: TaskCompletedEvent) {
-    this.taskAdapter.completeTask(event);
+    this.taskAdapter.completeTask({
+      eventName:'TaskCompleted',
+      eventVersion: 1,
+      eventTime: new Date(Date.now()).toISOString(),
+      producer: 'task_service',
+      payload: {
+        id: event.id
+      }
+    });
   }
 }
 

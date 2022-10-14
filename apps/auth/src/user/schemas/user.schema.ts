@@ -1,18 +1,14 @@
-import * as mongoose from 'mongoose';
-import validator from 'validator';
-import * as bcrypt from 'bcrypt';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { isUUID } from 'class-validator';
+import { Prop, Schema } from '@nestjs/mongoose';
+import { isUUID, isEmail } from 'class-validator';
 
 @Schema({
-  timestamps: true,
   versionKey: false,
   toJSON: {
     virtuals: true,
   },
+  collection: 'users',
 })
-export class User extends Document {
+export class UserSchema {
   @Prop({
     type: String,
     validators: isUUID,
@@ -24,22 +20,25 @@ export class User extends Document {
 
   @Prop({
     type: String,
+    lowercase: true,
+    validate: isEmail,
+    maxlength: 255,
+    minlength: 6,
+    index: true,
+    unique: true,
+  })
+  email: string;
+
+  @Prop({
+    type: String,
     required: true,
   })
   username: string;
 
   @Prop({
     type: String,
-    lowercase: true,
-    validate: validator.isEmail,
-    maxlength: 255,
-    minlength: 6,
-    index: true,
-  })
-  email: string;
-
-  @Prop({
-    type: String,
+    minlength: 5,
+    maxlength: 1024,
     required: true,
   })
   password: string;
@@ -50,24 +49,3 @@ export class User extends Document {
   })
   role: string;
 }
-
-const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.plugin(require('mongoose-autopopulate'));
-
-UserSchema.pre('save', async function (next) {
-  try {
-    if (!this.isModified('password')) {
-      return next();
-    }
-    // tslint:disable-next-line:no-string-literal
-    const hashed = await bcrypt.hash(this['password'], 10);
-    // tslint:disable-next-line:no-string-literal
-    this['password'] = hashed;
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-});
-
-export { UserSchema };

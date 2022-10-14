@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
-import { IViewUpdater, ViewUpdaterHandler } from 'src/event-sourcing';
+import { IViewUpdater, ViewUpdaterHandler } from '@libs/event-sourcing';
 import { Logger } from '@nestjs/common';
 import { TaskTrackerSchema } from 'src/task-tracker/schemas/task-tracker.schema';
 import { ReassignedEvent } from '../impl/reassigned.event';
