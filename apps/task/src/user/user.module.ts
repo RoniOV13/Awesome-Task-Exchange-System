@@ -1,12 +1,12 @@
-import { UserService } from './user.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
-import { EventSourcingModule } from 'src/event-sourcing';
+import { EventSourcingModule } from '@libs/event-sourcing';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
+import { UserConsumer } from './user.consumer';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { UserRepository } from './user.repository';
         options: {
           // @ts-ignore
           client: {
-            brokers: ['kafka:9093'],
+            brokers: ['localhost:9094'],
             clientId: 'task-tracker',
           },
           consumer: {
@@ -37,7 +37,7 @@ import { UserRepository } from './user.repository';
   ],
 
   controllers: [UserController],
-  providers: [UserService, UserRepository],
-  exports: [UserService, UserRepository],
+  providers: [ UserRepository, UserConsumer],
+  exports: [ UserRepository],
 })
 export class UserModule {}

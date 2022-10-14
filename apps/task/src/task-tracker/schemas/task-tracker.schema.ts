@@ -1,18 +1,16 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { isUUID } from 'class-validator';
 import { UserSchema } from 'src/user/schemas/user.schema';
 
 
-export const taskSchemaParams = {
-  timestamps: true,
+@Schema({
   versionKey: false,
-  collection: 'tasks',
-}
-
-const SchemaTypes = mongoose.Schema.Types
-@Schema(taskSchemaParams)
-export class TaskTrackerSchema extends Document {
+  toJSON: {
+    virtuals: true,
+  },
+  collection: 'task-tracker',
+})
+export class TaskTrackerSchema {
   @Prop({
     type: String,
     validators: isUUID,

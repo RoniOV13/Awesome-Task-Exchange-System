@@ -3,7 +3,7 @@ import { TaskRepository } from './repository/task-tracker.repository';
 import { getKafkaModuleConfig, TaskAdapter } from './adapters/task-tracker.adapters';
 import { Module } from '@nestjs/common';
 import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
-import { EventSourcingModule } from 'src/event-sourcing';
+import { EventSourcingModule } from '@libs/event-sourcing';
 import { CommandHandler, CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TaskTrackerSchema } from './schemas/task-tracker.schema';
@@ -28,7 +28,7 @@ import { StateUpdaters } from './events/updaters';
         options: {
           // @ts-ignore
           client: {
-            brokers: ['kafka:9093'],
+            brokers: ['localhost:9094'],
             clientId: 'task-tracker',
           },
           consumer: {

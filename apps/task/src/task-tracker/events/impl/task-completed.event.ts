@@ -1,4 +1,4 @@
-import { StorableEvent } from 'src/event-sourcing';
+import { StorableEvent } from '@libs/event-sourcing';
 
 export class TaskCompletedEvent extends StorableEvent {
   eventAggregate = 'task';

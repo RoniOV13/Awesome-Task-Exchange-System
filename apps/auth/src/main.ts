@@ -9,17 +9,16 @@ const MongoStore = require('connect-mongo')
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Authentication & Session
   app.use(
     session({
-      store: MongoStore.create({ mongoUrl: 'mongodb://mongodb:27017/auth' }), // where session will be stored
-      secret: process.env.SESSION_SECRET, // to sign session id
-      resave: false, // will default to false in near future: https://github.com/expressjs/session#resave
-      saveUninitialized: false, // will default to false in near future: https://github.com/expressjs/session#saveuninitialized
-      rolling: true, // keep session alive
+      store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/auth' }),
+      secret: process.env.SESSION_SECRET, 
+      resave: false, 
+      saveUninitialized: false,
+      rolling: true, 
       cookie: {
-        maxAge: 30 * 60 * 1000, // session expires in 1hr, refreshed by `rolling: true` option.
-        httpOnly: true, // so that cookie can't be accessed via client-side script
+        maxAge: 30 * 60 * 1000, 
+        httpOnly: true, 
       },
     }),
   );
@@ -31,7 +30,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   const options = new DocumentBuilder()
     .setTitle('auth example')
-    .setDescription('The test API description')
+    .setDescription('The auth API description')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);

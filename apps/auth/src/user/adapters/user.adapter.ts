@@ -1,10 +1,6 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
-import {
-  CREATE_USER_TOPIC,
-  UPDATE_USER_TOPIC,
-  CHANGE_ROLE_TOPIC,
-} from 'src/common/kafka/kafka-topics';
+import { USER_STREAM_TOPIC, USER_TOPIC } from 'src/common/kafka/kafka-topics';
 export const KAKFA_CLIENT_SYMBOL = Symbol('AUTH_SERVICE');
 
 export function getKafkaModuleConfig(
@@ -16,7 +12,7 @@ export function getKafkaModuleConfig(
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: ['kafka:9093'],
+        brokers: ['localhost:9094'],
         clientId,
       },
       consumer: {
@@ -29,6 +25,47 @@ export function getKafkaModuleConfig(
   // @ts-ignore
   return ClientsModule.register([config]);
 }
+
+
+type UserCreatedEvent = {
+  eventId: string,
+  eventName: string;
+  eventVersion: number;
+  eventTime: string;
+  producer: string;
+  payload: {
+    id: string;
+    username: string;
+    email: string;
+    role: string;
+  };
+};
+
+type ChangedRoleEvent = {
+  eventId: string,
+  eventName: string;
+  eventVersion: number;
+  eventTime: string;
+  producer: string;
+  payload: {
+    id: string;
+    role: string;
+  };
+};
+
+type UserUpdatedEvent = {
+  eventId: string,
+  eventName: string;
+  eventVersion: number;
+  eventTime: string;
+  producer: string;
+  payload: {
+    id: string;
+    username: string;
+    email: string;
+  };
+};
+
 
 @Injectable()
 export class UserAdapter implements OnModuleInit {
@@ -48,27 +85,15 @@ export class UserAdapter implements OnModuleInit {
     await this.kafka.close();
   }
 
-  async createUser(message: any): Promise<void> {
-    this.kafka.emit(CREATE_USER_TOPIC, {
-      id: message.id,
-      username: message.username,
-      email: message.email,
-      role: message.role ? message.role: 'employee'
-    });
+  async createUser(message: UserCreatedEvent): Promise<void> {
+    this.kafka.emit(USER_STREAM_TOPIC, message);
   }
 
-  async updateUser(message: any): Promise<void> {
-    this.kafka.emit(UPDATE_USER_TOPIC, {
-      id: message.id,
-      username: message.username,
-      email: message.email,
-    });
+  async updateUser(message: UserUpdatedEvent): Promise<void> {
+    this.kafka.emit(USER_STREAM_TOPIC, message);
   }
 
-  async changeRole(message: any): Promise<void> {
-    this.kafka.emit(CHANGE_ROLE_TOPIC, {
-      id: message.id,
-      role:message.role
-    });
+  async changeRole(message: ChangedRoleEvent): Promise<void> {
+    this.kafka.emit(USER_TOPIC, message);
   }
 }

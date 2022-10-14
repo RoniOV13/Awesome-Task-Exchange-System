@@ -1,17 +1,14 @@
 import { isUUID } from 'class-validator';
 import { Prop, Schema } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
 
-
-export const userSchemaParams = {
-  timestamps: true,
+@Schema({
   versionKey: false,
+  toJSON: {
+    virtuals: true,
+  },
   collection: 'users',
-}
-
-const SchemaTypes = mongoose.Schema.Types
-@Schema(userSchemaParams)
-export class UserSchema extends Document {
+})
+export class UserSchema {
   @Prop({
     type: String,
     validators: isUUID,

@@ -66,45 +66,45 @@ services:
     networks:
       - webnet
 
-  task:
-    build:
-      context: ./apps/task/
-      dockerfile: Dockerfile
-    environment:
-      NODE_ENV: "development"
-      PORT: 3000
-    volumes:
-      - ./apps/task/:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      - kafka
-      - mongodb
-    networks:
-      - webnet
-    ports:
-      - 3000:3000
-    command: npm run start
+  # task:
+  #   build:
+  #     context: ./apps/task/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NODE_ENV: "development"
+  #     PORT: 3000
+  #   volumes:
+  #     - ./apps/task/:/app
+  #     - /app/node_modules
+  #     - /app/dist
+  #   depends_on:
+  #     - kafka
+  #     - mongodb
+  #   networks:
+  #     - webnet
+  #   ports:
+  #     - 3000:3000
+  #   command: npm run start
 
-  auth:
-    build:
-      context: ./apps/auth/
-      dockerfile: Dockerfile
-    environment:
-      NODE_ENV: "development"
-      PORT: 3001
-    volumes:
-      - ./apps/auth/:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      - kafka
-      - mongodb
-    ports:
-      - 3001:3001
-    networks:
-      - webnet
-    command: npm run start
+  # auth:
+  #   build:
+  #     context: ./apps/auth/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NODE_ENV: "development"
+  #     PORT: 3001
+  #   volumes:
+  #     - ./apps/auth/:/app
+  #     - /app/node_modules
+  #     - /app/dist
+  #   depends_on:
+  #     - kafka
+  #     - mongodb
+  #   ports:
+  #     - 3001:3001
+  #   networks:
+  #     - webnet
+  #   command: npm run start
 
   # analytics:
   #   build:

@@ -2,7 +2,7 @@ import { TaskTrackerSchema } from '../../schemas/task-tracker.schema';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { StoreEventBus, StoreEventPublisher } from 'src/event-sourcing';
+import { StoreEventBus, StoreEventPublisher } from '@libs/event-sourcing';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
 import { UserRepository } from 'src/user/user.repository';
 import { ReassignCommand } from '../impl/reassign.command';
@@ -19,8 +19,6 @@ export class ReassignHandler
     private readonly taskModel: Model<TaskTrackerSchema>,
   ) {}
   async execute(command: ReassignCommand) {
-    console.log('ReassigneCommand...');
-
     const users = await this.userRepository.findAll({ role: 'employee' });
 
     const tasks = await this.taskModel.find({ isOpen: true });
@@ -34,7 +32,7 @@ export class ReassignHandler
         listEmployee[Math.floor(Math.random() * listEmployee.length)];
 
       task.reassign(task.id, employee.id);
-      console.log('task', task)
+
       this.eventBus.publishAll(task.getUncommittedEvents());
       await task.commit();
     });

@@ -4,16 +4,16 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppService } from './app.service';
 import { TaskModule } from './task-tracker/task-tracker.module';
-import { EventSourcingModule } from './event-sourcing';
+import { EventSourcingModule } from '@libs/event-sourcing';
 
 
 @Module({
   imports: [
     MongooseModule.forRoot(
-      `mongodb://mongodb:27017/task-tracker`,
+      `mongodb://localhost:27017/task-tracker`,
     ),
     EventSourcingModule.forRoot({
-      mongoURL: `mongodb://mongodb:27017/task-tracker`,
+      mongoURL: `mongodb://localhost:27017/task-tracker`,
       connectOptions: { },
       collectionsOptions: {
         eventsCollectionName: 'event-store',
@@ -28,7 +28,7 @@ import { EventSourcingModule } from './event-sourcing';
         options: {
           client: {
             clientId: 'task-tracker',
-            brokers: ['kafka:9093'],
+            brokers: ['localhost:9094'],
           },
           consumer: {
             groupId: 'task-tracker-consumer',

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
 import { UserSchema } from './schemas/user.schema';
-import { EventSourcingModule } from 'src/event-sourcing';
+import { EventSourcingModule } from '@libs/event-sourcing';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UserRepository } from './repository/user.repository';
 import { CommandHandlers } from './commands/handlers';
@@ -15,7 +15,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: 'User', schema: UserSchema, collection: 'users-query' },
+      {
+        name: UserSchema.name,
+        schema: SchemaFactory.createForClass(UserSchema),
+      },
     ]),
     CqrsModule,
     getKafkaModuleConfig(),
@@ -27,7 +30,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         options: {
           // @ts-ignore
           client: {
-            brokers: ['kafka:9093'],
+            brokers: ['localhost:9094'],
             clientId: 'auth',
           },
           consumer: {

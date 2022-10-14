@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { StoreEventBus, StoreEventPublisher } from 'src/event-sourcing';
+import { StoreEventBus, StoreEventPublisher } from '@libs/event-sourcing';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
 import { CompleteTaskCommand } from '../impl/complete-task.handler';
 

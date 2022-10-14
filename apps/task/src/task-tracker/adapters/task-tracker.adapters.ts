@@ -1,10 +1,8 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import {
-  CREATE_TASK_TOPIC,
-  UPDATE_UPDATE_TOPIC,
-  COMPLETE_TASK_TOPIC,
-  REASSIGN_USER_TOPIC,
+  TASK_TOPIC,
+  TASK_STREAM_TOPIC,
 } from 'src/common/kafka/kafka-topics';
 export const KAKFA_CLIENT_SYMBOL = Symbol('TASK_TRACKER_SERVICE');
 
@@ -17,7 +15,7 @@ export function getKafkaModuleConfig(
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: ['kafka:9093'],
+        brokers: ['localhost:9094'],
         clientId,
       },
       consumer: {
@@ -30,6 +28,50 @@ export function getKafkaModuleConfig(
   // @ts-ignore
   return ClientsModule.register([config]);
 }
+
+type TaskCompletedEvent = {
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
+  payload: {
+    id: string,
+  }
+}
+type ReassignedEvent = {
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
+  payload: {
+    id: string,
+    assigne: string,
+  }
+}
+type TaskUpdatedEvent = {
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
+  payload: {
+    id: string,
+    title: string,
+    description: string,
+  }
+}
+type TaskCreatedEvent = {
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
+  payload: {
+    id: string,
+    title: string,
+    description: string,
+    assigne: string,
+  }
+}
+
 
 @Injectable()
 export class TaskAdapter implements OnModuleInit {
@@ -49,19 +91,19 @@ export class TaskAdapter implements OnModuleInit {
     await this.kafka.close();
   }
 
-  async createTask(message: any): Promise<void> {
-    this.kafka.emit(CREATE_TASK_TOPIC, message);
+  async createTask(message: TaskCreatedEvent): Promise<void> {
+    this.kafka.emit(TASK_STREAM_TOPIC, message);
   }
 
-  async updateTask(message: any): Promise<void> {
-    this.kafka.emit(UPDATE_UPDATE_TOPIC, message);
+  async updateTask(message: TaskUpdatedEvent): Promise<void> {
+    this.kafka.emit(TASK_STREAM_TOPIC, message);
   }
 
-  async completeTask(message: any): Promise<void> {
-    this.kafka.emit(COMPLETE_TASK_TOPIC, message);
+  async completeTask(message: TaskCompletedEvent): Promise<void> {
+    this.kafka.emit(TASK_TOPIC, message);
   }
 
-  async reassignUser(message: any): Promise<void> {
-    this.kafka.emit(REASSIGN_USER_TOPIC, message);
+  async reassign(message: ReassignedEvent): Promise<void> {
+    this.kafka.emit(TASK_TOPIC, message);
   }
 }

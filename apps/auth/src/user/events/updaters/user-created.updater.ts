@@ -1,14 +1,14 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
-import { IViewUpdater, ViewUpdaterHandler } from 'src/event-sourcing';
+import { IViewUpdater, ViewUpdaterHandler } from '@libs/event-sourcing';
 import { UserCreatedEvent } from '../impl/user-created.event';
-import { User } from 'src/user/schemas/user.schema';
+import { UserSchema } from 'src/user/schemas/user.schema';
 
 @ViewUpdaterHandler(UserCreatedEvent)
 export class UserCreatedUpdater implements IViewUpdater<UserCreatedEvent> {
   constructor(
-    @InjectModel('User')
-    private readonly model: Model<User & Document>,
+    @InjectModel(UserSchema.name)
+    private readonly model: Model<UserSchema & Document>,
   ) { }
 
   private async isUserExist(id: string) {

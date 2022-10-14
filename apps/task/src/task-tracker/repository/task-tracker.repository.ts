@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Task } from '../models/task.model';
-import { EventStore } from 'src/event-sourcing';
+import { EventStore } from '@libs/event-sourcing';
 
 @Injectable()
 export class TaskRepository {
