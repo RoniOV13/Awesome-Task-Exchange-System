@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
+// import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { GetAllUsersQuery } from './queries/impl/get-all-users.query';
 import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
@@ -21,7 +21,7 @@ import { UpdateUserCommand } from './commands/impl/update-user.command';
 import { ChangeRoleCommand } from './commands/impl/change-role.command';
 import { ApiTags } from '@nestjs/swagger';
 
-// @UseGuards(RolesGuard)
+@UseGuards(RolesGuard)
 @ApiTags('User')
 @Controller('user')
 export class UserController {
