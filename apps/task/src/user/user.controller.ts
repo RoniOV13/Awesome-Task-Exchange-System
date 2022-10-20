@@ -16,17 +16,13 @@ constructor(
 ) {}
 
   @MessagePattern(USER_STREAM_TOPIC)
-  async createUser(@Payload() message: any) {
+  async listenUserStream(@Payload() message: any) {
     await this.userConsumer.handleEvent(message);
   }
 
   @MessagePattern(USER_TOPIC)
-  async changeRole(@Payload() message: any) {
+  async listenUser(@Payload() message: any) {
     await this.userConsumer.handleEvent(message);
   }
 
-  @MessagePattern(USER_STREAM_TOPIC)
-  async updateShopUsers(@Payload() message: any): Promise<void> {
-    await this.userConsumer.handleEvent(message);
-  }
 }

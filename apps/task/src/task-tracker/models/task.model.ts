@@ -12,7 +12,7 @@ export class Task extends AggregateRoot {
 
   public title: string;
   public description: string;
-  public assigne: string;
+  public assignee: string;
   public isOpen: boolean;
   public createdAt: string;
   public updatedAt: string;
@@ -25,12 +25,12 @@ export class Task extends AggregateRoot {
   onTaskCreatedEvent(event: TaskCreatedEvent) {
     this.title = event.title;
     this.description = event.description;
-    this.assigne = event.assigne;
+    this.assignee = event.assignee;
     this.createdAt = event.createdAt;
     this.updatedAt = event.createdAt;
   }
 
-  createTask(dto: CreateTaskDto, assigne: string) {
+  createTask(dto: CreateTaskDto, assignee: string) {
     const createdAt = new Date(Date.now()).toISOString(),
       updatedAt = new Date(Date.now()).toISOString();
 
@@ -39,7 +39,7 @@ export class Task extends AggregateRoot {
         this.id,
         dto.title,
         dto.description,
-        assigne,
+        assignee,
         createdAt,
         updatedAt,
       ),
@@ -56,12 +56,12 @@ export class Task extends AggregateRoot {
     );
   }
 
- reassign(id: string, assigne: string) {
+ reassign(id: string, assignee: string) {
     const updatedAt = new Date(Date.now()).toISOString();
     this.apply(
       new ReassignedEvent(
         id,
-        assigne,
+        assignee,
         updatedAt,
       ),
     );

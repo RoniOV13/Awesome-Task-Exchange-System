@@ -16,17 +16,17 @@ import { UserConsumer } from './user.consumer';
     CqrsModule,
     ClientsModule.register([
       {
-        name: 'TASK_TRACKER_SERVICE',
+        name: 'AUTH_SERVICE',
         // @ts-ignore
         transport: Transport.KAFKA,
         options: {
           // @ts-ignore
           client: {
             brokers: ['localhost:9094'],
-            clientId: 'task-tracker',
+            clientId: 'auth',
           },
           consumer: {
-            groupId: 'task-tracker-consumer',
+            groupId: 'auth-consumer',
             allowAutoTopicCreation: true,
           },
         },

@@ -20,9 +20,7 @@ import { CompleteTaskCommand } from './commands/impl/complete-task.handler';
 import { ReassignCommand } from './commands/impl/reassign.command';
 import { GetTasksQuery } from './queries/impl/get-all-task.query';
 import { QueryOptions } from 'mongoose';
-import usePagination from 'src/helpers/usePagination';
-import useSort from 'src/helpers/useSort';
-import useQuery from 'src/helpers/useQuery';
+import { usePagination, useSort } from '@libs/utils';
 import { GetTaskByIdQuery } from './queries/impl/get-task-by-id.query';
 
 @ApiTags('Task-Tracker')

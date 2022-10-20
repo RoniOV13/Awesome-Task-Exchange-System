@@ -26,7 +26,7 @@ export class ReassignHandler
     tasks.forEach(async (item) => {
       let task = await this.repository.findOneById(item.id);
 
-      let listEmployee = users.filter((user) => user.id !== task.assigne);
+      let listEmployee = users.filter((user) => user.id !== task.assignee);
 
       let employee =
         listEmployee[Math.floor(Math.random() * listEmployee.length)];
