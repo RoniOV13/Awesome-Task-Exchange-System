@@ -18,6 +18,6 @@ implements IViewUpdater<ReassignedEvent>
   
   async handle(event: ReassignedEvent) {
     console.log("ressigne",event )
-   await this.model.findOneAndUpdate({ id: event.id }, {$set: {assigne: event.assigne}});
+   await this.model.findOneAndUpdate({ id: event.id }, {$set: {assignee: event.assignee}});
 }
 }

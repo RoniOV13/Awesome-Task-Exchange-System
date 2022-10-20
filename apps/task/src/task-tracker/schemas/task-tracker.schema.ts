@@ -37,7 +37,7 @@ export class TaskTrackerSchema {
     ref: UserSchema.name,
     required: true,
   })
-  assigne: string;
+  assignee: string;
 
   @Prop({
     type: Boolean,

@@ -30,6 +30,7 @@ export function getKafkaModuleConfig(
 }
 
 type TaskCompletedEvent = {
+  eventId: string,
   eventName: string,
   eventVersion: number,
   eventTime: string,
@@ -39,16 +40,18 @@ type TaskCompletedEvent = {
   }
 }
 type ReassignedEvent = {
+  eventId: string,
   eventName: string,
   eventVersion: number,
   eventTime: string,
   producer: string,
   payload: {
     id: string,
-    assigne: string,
+    assignee: string,
   }
 }
 type TaskUpdatedEvent = {
+  eventId: string,
   eventName: string,
   eventVersion: number,
   eventTime: string,
@@ -60,6 +63,7 @@ type TaskUpdatedEvent = {
   }
 }
 type TaskCreatedEvent = {
+  eventId: string,
   eventName: string,
   eventVersion: number,
   eventTime: string,
@@ -68,7 +72,7 @@ type TaskCreatedEvent = {
     id: string,
     title: string,
     description: string,
-    assigne: string,
+    assignee: string,
   }
 }
 

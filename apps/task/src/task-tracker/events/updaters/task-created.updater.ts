@@ -27,12 +27,11 @@ implements IViewUpdater<TaskCreatedEvent>
 
   async handle(event: TaskCreatedEvent) {
     if (await this.isTaskExist(event.id)) await this.clearTask(event.id)
-      
-    console.log('asdad', event)
+
     const task = new this.model({
       id: event.id,
       title: event.title,
-      assigne: event.assigne,
+      assignee: event.assignee,
       description: event.description,
       createdAt: event.createdAt,
       updatedAt: event.updatedAt,

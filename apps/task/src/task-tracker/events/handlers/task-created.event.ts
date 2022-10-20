@@ -2,6 +2,7 @@ import { TaskCreatedEvent } from './../impl/task-created.event';
 import { IEventHandler } from '@nestjs/cqrs';
 import { EventsHandler } from '@nestjs/cqrs/dist/decorators/events-handler.decorator';
 import { TaskAdapter } from 'src/task-tracker/adapters/task-tracker.adapters';
+import { v4 as uuid } from 'uuid';
 
 @EventsHandler(TaskCreatedEvent)
 export class TaskCreatedHandler implements IEventHandler<TaskCreatedEvent> {
@@ -9,6 +10,7 @@ export class TaskCreatedHandler implements IEventHandler<TaskCreatedEvent> {
 
   handle(event: TaskCreatedEvent) {
     this.taskAdapter.createTask({
+      eventId: uuid(),   
       eventName:'TaskCreated',
       eventVersion: 1,
       eventTime: new Date(Date.now()).toISOString(),
@@ -17,7 +19,7 @@ export class TaskCreatedHandler implements IEventHandler<TaskCreatedEvent> {
         id: event.id,
         title: event.title,
         description: event.description,
-        assigne: event.assigne,
+        assignee: event.assignee,
       }
     });
   }
