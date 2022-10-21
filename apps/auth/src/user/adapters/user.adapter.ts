@@ -1,7 +1,9 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
-import { USER_STREAM_TOPIC, USER_TOPIC } from 'src/common/kafka/kafka-topics';
 export const KAKFA_CLIENT_SYMBOL = Symbol('AUTH_SERVICE');
+
+const USER_STREAM_TOPIC = "user-stream";
+const USER_TOPIC = "user";
 
 export function getKafkaModuleConfig(
   clientId = 'auth',

@@ -18,7 +18,7 @@ export class GetUserByEmailHandler
 
   async execute({ email }: GetUserByEmailQuery) {
     const user = await this.model.findOne({ email });
-    if (!user) throw new NotFoundException();
+    if (!user) return null
     return await this.repository.findOneById(user.id);
   }
 }

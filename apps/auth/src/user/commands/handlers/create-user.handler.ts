@@ -15,9 +15,9 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
 
   async execute(command: CreateUserCommand) {
     const id = uuid();
-
+     
     const isExistEmail = await this.queryBus.execute(new GetUserByEmailQuery(command.dto.email));
-
+  
     if (isExistEmail) {
       throw new NotFoundException('Пользователь с данной почтой уже сущесвует');
     }
