@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "analytics",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -21,19 +21,27 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@libs/event-sourcing": "../../libs/event-sourcing",
+    "@libs/event-store": "../../libs/event-store",
+    "@libs/utils": "../../libs/utils",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/cqrs": "^9.0.1",
     "@nestjs/microservices": "^9.1.2",
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.2",
+    "async": "^3.2.4",
     "class-validator": "^0.13.2",
+    "dotty": "^0.1.2",
     "kafkajs": "^2.2.0",
     "mongoose": "^6.6.1",
     "mongoose-autopopulate": "^0.16.1",
+    "parent-require": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "tolerance": "^1.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
