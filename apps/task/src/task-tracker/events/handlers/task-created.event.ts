@@ -12,12 +12,13 @@ export class TaskCreatedHandler implements IEventHandler<TaskCreatedEvent> {
     this.taskAdapter.createTask({
       eventId: uuid(),   
       eventName:'TaskCreated',
-      eventVersion: 1,
+      eventVersion: 2,
       eventTime: new Date(Date.now()).toISOString(),
       producer: 'task_service',
       payload: {
         id: event.id,
         title: event.title,
+        jiraId: event.jiraId,
         description: event.description,
         assignee: event.assignee,
       }

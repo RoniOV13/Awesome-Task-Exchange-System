@@ -28,6 +28,12 @@ export class TaskTrackerSchema {
 
   @Prop({
     type: String,
+    default: '',
+  })
+  jiraId: string;
+
+  @Prop({
+    type: String,
     required: true,
   })
   description: string;

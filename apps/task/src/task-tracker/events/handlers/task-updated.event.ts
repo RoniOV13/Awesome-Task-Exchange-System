@@ -12,12 +12,13 @@ export class TaskUpdatedHandler implements IEventHandler<TaskUpdatedEvent> {
     this.taskAdapter.updateTask({
       eventId: uuid(),   
       eventName:'TaskUpdated',
-      eventVersion: 1,
+      eventVersion: 2,
       eventTime: new Date(Date.now()).toISOString(),
       producer: 'task_service',
       payload: {
         id: event.id,
         title: event.title,
+        jiraId: event.jiraId,
         description: event.description,
       }
     });

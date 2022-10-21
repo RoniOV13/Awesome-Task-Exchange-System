@@ -7,6 +7,7 @@ export class TaskUpdatedEvent extends StorableEvent {
   constructor(
     public readonly id: string,
     public readonly title: string,
+    public readonly jiraId: string,
     public readonly description: string,
     public readonly updatedAt: string,
   ) {
