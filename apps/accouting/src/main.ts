@@ -7,13 +7,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   await app.connectMicroservice({
+    name: 'ACCOUNTING_SERVICE',
     transport: Transport.KAFKA,
     options: {
       client: {
         brokers: ['localhost:9094'],
+        clientId: 'accounting',
       },
       consumer: {
-        groupId: 'accounting',
+        groupId: 'accounting-consumer',
+        allowAutoTopicCreation: true,
       },
     },
   });
