@@ -21,7 +21,6 @@ import { UpdateUserCommand } from './commands/impl/update-user.command';
 import { ChangeRoleCommand } from './commands/impl/change-role.command';
 import { ApiTags } from '@nestjs/swagger';
 
-@UseGuards(RolesGuard)
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -30,12 +29,12 @@ export class UserController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Post('create-user')
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return this.commandBus.execute(new CreateUserCommand(createUserDto));
   }
 
-  @Post('change-role')
+  @Post('/change-role')
   async changeRole(@Body() changeRoleDto: changeRoleDto) {
     return this.commandBus.execute(new ChangeRoleCommand(changeRoleDto.id, changeRoleDto.role));
   }
