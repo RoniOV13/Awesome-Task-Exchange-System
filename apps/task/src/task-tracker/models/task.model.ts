@@ -11,6 +11,7 @@ export class Task extends AggregateRoot {
   public readonly id: string;
 
   public title: string;
+  public jiraId: string;
   public description: string;
   public assignee: string;
   public isOpen: boolean;
@@ -24,6 +25,7 @@ export class Task extends AggregateRoot {
 
   onTaskCreatedEvent(event: TaskCreatedEvent) {
     this.title = event.title;
+    this.jiraId = event.jiraId;
     this.description = event.description;
     this.assignee = event.assignee;
     this.createdAt = event.createdAt;
@@ -38,6 +40,7 @@ export class Task extends AggregateRoot {
       new TaskCreatedEvent(
         this.id,
         dto.title,
+        dto.jiraId,
         dto.description,
         assignee,
         createdAt,
@@ -74,6 +77,7 @@ export class Task extends AggregateRoot {
       new TaskUpdatedEvent(
         id,
         dto.title,
+        dto.jiraId,
         dto.description,
         updatedAt,
       ),

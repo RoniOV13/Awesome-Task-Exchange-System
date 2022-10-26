@@ -31,6 +31,7 @@ implements IViewUpdater<TaskCreatedEvent>
     const task = new this.model({
       id: event.id,
       title: event.title,
+      jiraId: event.jiraId,
       assignee: event.assignee,
       description: event.description,
       createdAt: event.createdAt,

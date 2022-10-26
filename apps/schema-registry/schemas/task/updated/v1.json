@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "title": "TaskUpdated.v1",
+  "description": "json schema for CUD task event (version 1)",
+  "id": "urn:updated_1#",
+  "definitions": {
+    "event_data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "title", "description"]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventId": { "type": "string" },
+    "eventName": { "type": "string" },
+    "eventVersion": { "type": "number" },
+    "eventTime": { "type": "string" },
+    "producer": { "type": "string" },
+
+    "payload": { "$ref": "#/definitions/event_data" }
+  },
+
+  "required": [
+    "eventId",
+    "eventName",
+    "eventVersion",
+    "eventTime",
+    "producer",
+    "payload"
+  ]
+}
