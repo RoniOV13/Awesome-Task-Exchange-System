@@ -1,10 +1,14 @@
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
-import {
-  TASK_TOPIC,
-  TASK_STREAM_TOPIC,
-} from 'src/common/kafka/kafka-topics';
 export const KAKFA_CLIENT_SYMBOL = Symbol('TASK_TRACKER_SERVICE');
+
+let SchemaTaskCreatedV2 = require('../../../../schema-registry/schemas/task/created/v2.json');
+let SchemaTaskUpdatedV2 = require('../../../../schema-registry/schemas/task/updated/v2.json');
+
+let jsv = require('JSV').JSV.createEnvironment();
+
+const TASK_TOPIC = "task"
+const TASK_STREAM_TOPIC = "task-stream"
 
 export function getKafkaModuleConfig(
   clientId = 'task-tracker',
@@ -36,9 +40,22 @@ type TaskCompletedEvent = {
   eventTime: string,
   producer: string,
   payload: {
-    id: string,
-  }
-}
+    id: string;
+  };
+};
+
+type TaskAssignedEvent = {
+  eventId: string;
+  eventName: string;
+  eventVersion: number;
+  eventTime: string;
+  producer: string;
+  payload: {
+    id: string;
+    assignee: string;
+  };
+};
+
 type ReassignedEvent = {
   eventId: string,
   eventName: string,
@@ -46,10 +63,11 @@ type ReassignedEvent = {
   eventTime: string,
   producer: string,
   payload: {
-    id: string,
-    assignee: string,
-  }
-}
+    id: string;
+    assignee: string;
+  };
+};
+
 type TaskUpdatedEvent = {
   eventId: string,
   eventName: string,
@@ -69,13 +87,12 @@ type TaskCreatedEvent = {
   eventTime: string,
   producer: string,
   payload: {
-    id: string,
-    title: string,
-    description: string,
-    assignee: string,
-  }
-}
-
+    id: string;
+    title: string;
+    jiraId: string;
+    description: string;
+  };
+};
 
 @Injectable()
 export class TaskAdapter implements OnModuleInit {
@@ -96,15 +113,37 @@ export class TaskAdapter implements OnModuleInit {
   }
 
   async createTask(message: TaskCreatedEvent): Promise<void> {
-    this.kafka.emit(TASK_STREAM_TOPIC, message);
+    const result = jsv.validate(message, SchemaTaskCreatedV2);
+
+    if (result) {
+      this.kafka.emit(TASK_STREAM_TOPIC, message);
+
+      return;
+    }
+    throw new NotFoundException('Schema is not valid');
   }
+  
+  async assignTask(message: TaskAssignedEvent){
+    this.kafka.emit(TASK_TOPIC, message);
+  } 
 
   async updateTask(message: TaskUpdatedEvent): Promise<void> {
-    this.kafka.emit(TASK_STREAM_TOPIC, message);
+   const result = jsv.validate(message, SchemaTaskUpdatedV2);
+    if (result) {
+      this.kafka.emit(TASK_STREAM_TOPIC, message);
+      return;
+    } else {
+      message.eventVersion = 1;
+      this.kafka.emit(TASK_STREAM_TOPIC, message);
+    }
   }
 
   async completeTask(message: TaskCompletedEvent): Promise<void> {
     this.kafka.emit(TASK_TOPIC, message);
+  }
+
+  async deleteTask(message: any): Promise<void> {
+    this.kafka.emit(TASK_STREAM_TOPIC, message);
   }
 
   async reassign(message: ReassignedEvent): Promise<void> {

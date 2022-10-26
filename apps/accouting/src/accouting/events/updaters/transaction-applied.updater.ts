@@ -3,13 +3,14 @@ import { Model, Document } from 'mongoose';
 import { IViewUpdater, ViewUpdaterHandler } from '@libs/event-sourcing';
 import { Logger } from '@nestjs/common';
 import { TransactionSchema } from 'src/accouting/schemas/transaction.schema';
-import { TransactionCreatedEvent } from '../impl/transaction-created.event';
+import { TransactionAppliedEvent } from '../impl/transaction-applied.event';
+;
 
-@ViewUpdaterHandler(TransactionCreatedEvent)
-export class TransactionCreatedUpdater
-implements IViewUpdater<TransactionCreatedEvent>
+@ViewUpdaterHandler(TransactionAppliedEvent)
+export class TransactionAppliedUpdater
+implements IViewUpdater<TransactionAppliedEvent>
 {
-  private readonly logger = new Logger(TransactionCreatedUpdater.name)
+  private readonly logger = new Logger(TransactionAppliedUpdater.name)
   constructor(
     @InjectModel(TransactionSchema.name)
     private readonly model: Model<TransactionSchema & Document>,
@@ -25,7 +26,7 @@ implements IViewUpdater<TransactionCreatedEvent>
     return await this.model.findOneAndDelete({ id })
   }
 
-  async handle(event: TransactionCreatedEvent) {
+  async handle(event: TransactionAppliedEvent) {
     if (await this.isTransactionExist(event.id)) await this.clearTransaction(event.id)
 
     const transaction = new this.model({

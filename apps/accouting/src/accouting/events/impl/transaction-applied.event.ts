@@ -1,6 +1,6 @@
 import { StorableEvent } from '@libs/event-sourcing';
 
-export class TransactionCreatedEvent extends StorableEvent {
+export class TransactionAppliedEvent extends StorableEvent {
   eventAggregate = 'transaction';
   eventVersion = 1;
 

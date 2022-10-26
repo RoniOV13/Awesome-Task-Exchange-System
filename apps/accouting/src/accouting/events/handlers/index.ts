@@ -1,3 +1,3 @@
-import { TransactionCreatedHandler } from './transaction-created.handler';
+import { TransactionAppliedHandler } from "./transaction-applied.handler";
 
-export const EventHandlers = [TransactionCreatedHandler];
+export const EventHandlers = [TransactionAppliedHandler];

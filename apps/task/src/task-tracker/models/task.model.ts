@@ -1,10 +1,12 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
-import { ReassignedEvent } from '../events/impl/reassigned.event';
+import { TaskReassignedEvent } from '../events/impl/task-reassigned.event';
+import { TaskAssignedEvent } from '../events/impl/task-assigned.event';
 import { TaskCompletedEvent } from '../events/impl/task-completed.event';
 import { TaskCreatedEvent } from '../events/impl/task-created.event';
 import { TaskUpdatedEvent } from '../events/impl/task-updated.event';
+import { TaskDeletedEvent } from '../events/impl/task-deleted.event';
 
 
 export class Task extends AggregateRoot {
@@ -15,8 +17,7 @@ export class Task extends AggregateRoot {
   public description: string;
   public assignee: string;
   public isOpen: boolean;
-  public createdAt: string;
-  public updatedAt: string;
+
 
   constructor(id: string) {
     super();
@@ -27,14 +28,10 @@ export class Task extends AggregateRoot {
     this.title = event.title;
     this.jiraId = event.jiraId;
     this.description = event.description;
-    this.assignee = event.assignee;
-    this.createdAt = event.createdAt;
-    this.updatedAt = event.createdAt;
   }
 
-  createTask(dto: CreateTaskDto, assignee: string) {
-    const createdAt = new Date(Date.now()).toISOString(),
-      updatedAt = new Date(Date.now()).toISOString();
+  createTask(dto: CreateTaskDto) {
+    const createdAt = new Date(Date.now()).toISOString()
 
     this.apply(
       new TaskCreatedEvent(
@@ -42,44 +39,54 @@ export class Task extends AggregateRoot {
         dto.title,
         dto.jiraId,
         dto.description,
-        assignee,
         createdAt,
-        updatedAt,
       ),
     );
   }
 
  completeTask(id: string) {
-    const updatedAt = new Date(Date.now()).toISOString();
     this.apply(
       new TaskCompletedEvent(
-        id,
-        updatedAt,
+        id
       ),
     );
   }
 
- reassign(id: string, assignee: string) {
-    const updatedAt = new Date(Date.now()).toISOString();
+ reassignTask(id: string, assignee: string) {
     this.apply(
-      new ReassignedEvent(
+      new TaskReassignedEvent(
         id,
         assignee,
-        updatedAt,
+      ),
+    );
+  }
+
+
+ assignTask(id: string, assignee: string) {
+  this.apply(
+    new TaskAssignedEvent(
+      id,
+      assignee,
+    ),
+  );
+  }
+
+  deleteTask(id:string) {
+    this.apply(
+      new TaskDeletedEvent(
+        id,
       ),
     );
   }
 
   updateTask(id: string, dto: UpdateTaskDto) {
-    const updatedAt = new Date(Date.now()).toISOString();
-  
+ 
     this.apply(
       new TaskUpdatedEvent(
         id,
         dto.title,
         dto.jiraId,
         dto.description,
-        updatedAt,
       ),
     );
   }

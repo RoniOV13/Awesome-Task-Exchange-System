@@ -12,6 +12,7 @@ import { EventHandlers } from './events/handlers';
 import { QueryHandlers } from './queries/handlers';
 import { UserModule } from 'src/user/user.module';
 import { StateUpdaters } from './events/updaters';
+import { AssignTaskSaga } from './sagas/assign-task.saga';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { StateUpdaters } from './events/updaters';
   providers: [
   TaskAdapter,
   TaskRepository,
+  AssignTaskSaga,
   ...CommandHandlers,
   ...EventHandlers,
   ...QueryHandlers,

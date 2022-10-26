@@ -1,5 +1,5 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { TransactionCreatedEvent } from '../events/impl/transaction-created.event';
+import { TransactionAppliedEvent } from '../events/impl/transaction-applied.event';
 
 export class Transaction extends AggregateRoot {
   public readonly id: string;
@@ -16,7 +16,7 @@ export class Transaction extends AggregateRoot {
     this.id = id;
   }
 
-  onTransactionCreatedEvent(event: TransactionCreatedEvent) {
+  onTransactionAppliedEvent(event: TransactionAppliedEvent) {
     this.userId = event.userId;
     this.debit = event.debit;
     this.credit = event.debit;
@@ -25,11 +25,11 @@ export class Transaction extends AggregateRoot {
     this.createdAt = event.createdAt;
   }
 
-  createTransaction(data: any) {
+  applyTransaction(data: any) {
     const createdAt = new Date(Date.now()).toISOString();
  
     this.apply(
-      new TransactionCreatedEvent(
+      new TransactionAppliedEvent(
         this.id,
         data.userId,
         data.type,

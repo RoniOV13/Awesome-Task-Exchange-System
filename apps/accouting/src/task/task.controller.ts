@@ -13,7 +13,6 @@ export class TaskController {
 
   @MessagePattern(TASK_STREAM_TOPIC)
   async listenTaskStream(@Payload() message: any) {
-    console.log('TASK_STREAM_TOPIC', message);
     await this.taskConsumer.handleEvent(message);
   }
 

@@ -17,18 +17,9 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
 
     const id = uuid();
 
-    const users = await this.userRepository.findAll({ role: 'employee' });
-
-    if (!users.length) {
-      throw new NotFoundException(
-        'Задача не может быть создана из-за отстуствия исполнителя',
-      );
-    }
     const task = new Task(id);
-
-    let employee = users[Math.floor(Math.random() * users.length)];
    
-    task.createTask(command.dto, employee.id);
+    task.createTask(command.dto);
      
     this.eventBus.publishAll(task.getUncommittedEvents());
 

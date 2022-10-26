@@ -26,7 +26,7 @@ export class ApplyDepositTransactionHandler
 
     const transaction = new Transaction(id);
 
-    transaction.createTransaction({
+    transaction.applyTransaction({
       userId: command.dto.userId,
       type: TRANSACTION_TYPES.expense,
       credit: 0,

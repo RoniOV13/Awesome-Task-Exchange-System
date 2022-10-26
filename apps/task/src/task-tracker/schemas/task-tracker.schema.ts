@@ -40,8 +40,7 @@ export class TaskTrackerSchema {
 
   @Prop({
     type: String,
-    ref: UserSchema.name,
-    required: true,
+    default: '',
   })
   assignee: string;
 

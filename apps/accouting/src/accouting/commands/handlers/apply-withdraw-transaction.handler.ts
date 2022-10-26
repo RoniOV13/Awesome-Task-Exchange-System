@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { StoreEventBus } from '@libs/event-sourcing';
 import { v4 as uuid } from 'uuid';
-import { QueryBus } from '@nestjs/cqrs';
 import { Transaction } from 'src/accouting/models/transaction.model';
 import { UserRepository } from 'src/user/user.repository';
 import { TRANSACTION_TYPES } from 'src/accouting/constants';
@@ -25,7 +24,7 @@ export class ApplyWithdrawTransactionHandler
 
     const transaction = new Transaction(id);
 
-    transaction.createTransaction({
+    transaction.applyTransaction({
       userId: command.dto.userId,
       type: TRANSACTION_TYPES.income,
       credit: command.dto.value,

@@ -17,11 +17,11 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { CreateTaskCommand } from './commands/impl/create-task.handler';
 import { UpdateTaskCommand } from './commands/impl/update-task.command';
 import { CompleteTaskCommand } from './commands/impl/complete-task.handler';
-import { ReassignCommand } from './commands/impl/reassign.command';
 import { GetTasksQuery } from './queries/impl/get-all-task.query';
 import { QueryOptions } from 'mongoose';
 import { usePagination, useSort } from '@libs/utils';
 import { GetTaskByIdQuery } from './queries/impl/get-task-by-id.query';
+import { ReassignTaskCommand } from './commands/impl/reassign-task.handler';
 
 @ApiTags('Task-Tracker')
 @Controller('task-tracker')
@@ -73,7 +73,7 @@ export class TaskTrackerController {
 
   @Get('/user/reassign')
   async reassign() {
-    return this.commandBus.execute(new ReassignCommand());
+    return this.commandBus.execute(new ReassignTaskCommand());
   }
 
   @Put(':id')

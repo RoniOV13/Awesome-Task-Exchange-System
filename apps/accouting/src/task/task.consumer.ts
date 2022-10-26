@@ -21,8 +21,11 @@ export class TaskConsumer {
         }
         await this.repository.create(event.payload);
         break;
-      case 'Reassign':
-        await this.repository.ressign(event.payload);
+      case 'TaskAssigned':
+        await this.repository.assignTask(event.payload);
+        break;
+      case 'TaskReassigned':
+        await this.repository.reassignTask(event.payload);
         break;
       case 'TaskCompleted':
         await this.repository.completeTask(event.payload.id);

@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 
 const TRANSACTION_STREAM_TOPIC = 'transaction-stream'
+const TRANSACTION_TOPIC = 'transaction'
 
 export function getKafkaModuleConfig(
   clientId = 'accounting',
@@ -26,7 +27,7 @@ export function getKafkaModuleConfig(
   return ClientsModule.register([config]);
 }
 
-type TransactionCreatedEvent = {
+type TransactionAppliedEvent = {
   eventId: string,
   eventName: string,
   eventVersion: number,
@@ -62,8 +63,8 @@ export class TransactionAdapter implements OnModuleInit {
     await this.kafka.close();
   }
 
-  async createTransaction(message: TransactionCreatedEvent): Promise<void> {
-    this.kafka.emit(TRANSACTION_STREAM_TOPIC, message);
+  async applyTransaction(message: TransactionAppliedEvent): Promise<void> {
+    this.kafka.emit(TRANSACTION_TOPIC, message);
   }
 
 }
