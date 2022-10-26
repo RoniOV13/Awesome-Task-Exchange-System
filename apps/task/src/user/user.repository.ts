@@ -19,8 +19,8 @@ export class UserRepository {
   }
 
   async findAll(query: any) {
-    const user = await this.model.find(query);
-    return user;
+    const users = await this.model.find(query);
+    return users;
   }
 
   async findOne(id: string) {

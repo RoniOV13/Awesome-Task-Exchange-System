@@ -49,6 +49,19 @@ type TaskCompletedEvent = {
     id: string;
   };
 };
+
+type TaskAssignedEvent = {
+  eventId: string;
+  eventName: string;
+  eventVersion: number;
+  eventTime: string;
+  producer: string;
+  payload: {
+    id: string;
+    assignee: string;
+  };
+};
+
 type ReassignedEvent = {
   eventId: string;
   eventName: string;
@@ -60,6 +73,7 @@ type ReassignedEvent = {
     assignee: string;
   };
 };
+
 type TaskUpdatedEvent = {
   eventId: string;
   eventName: string;
@@ -84,7 +98,6 @@ type TaskCreatedEvent = {
     title: string;
     jiraId: string;
     description: string;
-    assignee: string;
   };
 };
 
@@ -110,7 +123,6 @@ export class TaskAdapter implements OnModuleInit {
 
     const result = jsv.validate(message, SchemaTaskCreatedV2);
 
-    console.log('schemwqa', result.errors);
     if (result) {
       this.kafka.emit(TASK_STREAM_TOPIC, message);
 
@@ -118,12 +130,14 @@ export class TaskAdapter implements OnModuleInit {
     }
     throw new NotFoundException('Schema is not valid');
   }
+  
+  async assignTask(message: TaskAssignedEvent){
+    this.kafka.emit(TASK_TOPIC, message);
+  } 
 
   async updateTask(message: TaskUpdatedEvent): Promise<void> {
-   console.log('')
    const result = jsv.validate(message, SchemaTaskUpdatedV2);
     if (result) {
-      console.log('')
       this.kafka.emit(TASK_STREAM_TOPIC, message);
       return;
     } else {
@@ -134,6 +148,10 @@ export class TaskAdapter implements OnModuleInit {
 
   async completeTask(message: TaskCompletedEvent): Promise<void> {
     this.kafka.emit(TASK_TOPIC, message);
+  }
+
+  async deleteTask(message: any): Promise<void> {
+    this.kafka.emit(TASK_STREAM_TOPIC, message);
   }
 
   async reassign(message: ReassignedEvent): Promise<void> {

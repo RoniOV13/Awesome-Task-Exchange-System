@@ -9,7 +9,7 @@ export class TransactionConsumer {
 
   async handleEvent(event: any) {
     switch (event.eventName) {
-      case 'TransactionCreated':
+      case 'TransactionApplied':
          await this.repository.create(event.payload);
         break;
       default:

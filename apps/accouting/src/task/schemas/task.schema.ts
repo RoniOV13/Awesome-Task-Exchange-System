@@ -26,13 +26,13 @@ export class TaskSchema {
 
   @Prop({
     type: String,
-    required: true,
+    default: '',
   })
   jiraId: string;
 
   @Prop({
     type: String,
-    required: true,
+    default: '',
   })
   assignee: string;
 

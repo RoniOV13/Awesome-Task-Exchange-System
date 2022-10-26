@@ -5,11 +5,11 @@ import { Model } from 'mongoose';
 import { StoreEventBus, StoreEventPublisher } from '@libs/event-sourcing';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
 import { UserRepository } from 'src/user/user.repository';
-import { ReassignCommand } from '../impl/reassign.command';
+import { ReassignTaskCommand } from '../impl/reassign-task.handler';
 
-@CommandHandler(ReassignCommand)
+@CommandHandler(ReassignTaskCommand)
 export class ReassignHandler
-  implements ICommandHandler<ReassignCommand>
+  implements ICommandHandler<ReassignTaskCommand>
 {
   constructor(
     private readonly repository: TaskRepository,
@@ -18,7 +18,7 @@ export class ReassignHandler
     @InjectModel(TaskTrackerSchema.name)
     private readonly taskModel: Model<TaskTrackerSchema>,
   ) {}
-  async execute(command: ReassignCommand) {
+  async execute() {
     const users = await this.userRepository.findAll({ role: 'employee' });
 
     const tasks = await this.taskModel.find({ isOpen: true });
@@ -31,7 +31,7 @@ export class ReassignHandler
       let employee =
         listEmployee[Math.floor(Math.random() * listEmployee.length)];
 
-      task.reassign(task.id, employee.id);
+      task.reassignTask(task.id, employee.id);
 
       this.eventBus.publishAll(task.getUncommittedEvents());
       await task.commit();

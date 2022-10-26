@@ -13,10 +13,10 @@ export class UserConsumer {
       case 'UserCreated':
          await this.repository.create(event.payload);
         break;
-      case 'ChangedRoleEvent':
+      case 'ChangedRole':
         await this.repository.changeRole(event.payload);
         break;
-      case 'UserUpdatedEvent':
+      case 'UserUpdated':
         await this.repository.update(event.payload);
         break;
       default:

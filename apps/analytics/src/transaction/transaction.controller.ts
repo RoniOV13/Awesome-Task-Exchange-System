@@ -2,8 +2,8 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { TransactionConsumer } from './transaction.consumer';
 
-const TRANSACTION_STREAM_TOPIC = 'transaction-stream';
-const TRANSACTION_TOPIC = 'transaction';
+const TRANSACTION_STREAM_TOPIC = 'transaction-stream'
+const TRANSACTION_TOPIC = 'transaction'
 
 @Controller({
   path: 'transaction',
@@ -18,6 +18,7 @@ export class TransactionController {
 
   @MessagePattern(TRANSACTION_TOPIC)
   async listenTransaction(@Payload() message: any) {
+    console.log('transaction', message)
     await this.transactionConsumer.handleEvent(message);
   }
 }

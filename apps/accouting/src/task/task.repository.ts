@@ -24,15 +24,6 @@ export class TaskRepository {
     task.paydout = this.getRandomNumberBetween(20, 40);
 
     await task.save();
-
-    return this.commandBus.execute(
-      new ApplyDepositTransactionCommand({
-        userId: task.assignee,
-        value: task.cost,
-        taskId: task.id,
-        reason: REASON_TYPES.TASK_ASSIGNED,
-      }),
-    );
   }
 
   async findAll(query: any) {
@@ -53,8 +44,22 @@ export class TaskRepository {
     }
   }
 
-  async ressign(data: ReassignDto) {
+  async reassignTask(data: ReassignDto) {
     const task = await this.model.findOne({ id: data.taskId });
+    task.assignee = data.assignee;
+    await task.save();
+    return this.commandBus.execute(
+      new ApplyDepositTransactionCommand({
+        userId: task.assignee,
+        value: task.cost,
+        taskId: task.id,
+        reason: REASON_TYPES.TASK_ASSIGNED,
+      }),
+    );
+  }
+
+  async assignTask(data: { id: string; assignee: string }) {
+    const task = await this.model.findOne({ id: data.id });
     task.assignee = data.assignee;
     await task.save();
     return this.commandBus.execute(

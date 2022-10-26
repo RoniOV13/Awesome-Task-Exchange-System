@@ -1,3 +1,3 @@
-import { TransactionCreatedUpdater } from "./transaction-created.updater";
+import { TransactionAppliedUpdater } from "./transaction-applied.updater";
 
-export const StateUpdaters = [TransactionCreatedUpdater];
+export const StateUpdaters = [TransactionAppliedUpdater];

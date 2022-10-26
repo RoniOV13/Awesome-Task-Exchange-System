@@ -32,10 +32,9 @@ implements IViewUpdater<TaskCreatedEvent>
       id: event.id,
       title: event.title,
       jiraId: event.jiraId,
-      assignee: event.assignee,
+      assignee: '',
       description: event.description,
       createdAt: event.createdAt,
-      updatedAt: event.updatedAt,
     });
 
     await task.save();

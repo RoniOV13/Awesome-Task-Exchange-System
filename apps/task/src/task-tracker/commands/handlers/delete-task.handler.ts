@@ -1,18 +1,18 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { StoreEventBus, StoreEventPublisher } from '@libs/event-sourcing';
 import { TaskRepository } from 'src/task-tracker/repository/task-tracker.repository';
-import { UpdateTaskCommand } from '../impl/update-task.command';
+import { DeleteTaskCommand } from '../impl/delete-task.handler';
 
-@CommandHandler(UpdateTaskCommand)
-export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
+@CommandHandler(DeleteTaskCommand)
+export class DeleteTaskHandler implements ICommandHandler<DeleteTaskCommand> {
   constructor(
     private readonly repository: TaskRepository,
     private readonly eventBus: StoreEventBus,
     private readonly eventPublicher: StoreEventPublisher
   ) { }
-  async execute(command: UpdateTaskCommand) {
+  async execute(command: DeleteTaskCommand) {
     const task = await this.repository.findOneById(command.id);
-    task.updateTask(command.id, command.dto);
+    task.deleteTask(command.id);
 
     this.eventBus.publishAll(task.getUncommittedEvents());
     await task.commit();
