@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 export const KAKFA_CLIENT_SYMBOL = Symbol('TASK_TRACKER_SERVICE');
 
@@ -21,7 +15,7 @@ export function getKafkaModuleConfig(
   groupId = 'task-tracker-consumer',
 ) {
   const config = {
-    name: 'TASK_TRACKER_SERVICE',
+    name: KAKFA_CLIENT_SYMBOL,
     transport: Transport.KAFKA,
     options: {
       client: {
@@ -40,11 +34,11 @@ export function getKafkaModuleConfig(
 }
 
 type TaskCompletedEvent = {
-  eventId: string;
-  eventName: string;
-  eventVersion: number;
-  eventTime: string;
-  producer: string;
+  eventId: string,
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
   payload: {
     id: string;
   };
@@ -63,11 +57,11 @@ type TaskAssignedEvent = {
 };
 
 type ReassignedEvent = {
-  eventId: string;
-  eventName: string;
-  eventVersion: number;
-  eventTime: string;
-  producer: string;
+  eventId: string,
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
   payload: {
     id: string;
     assignee: string;
@@ -75,24 +69,23 @@ type ReassignedEvent = {
 };
 
 type TaskUpdatedEvent = {
-  eventId: string;
-  eventName: string;
-  eventVersion: number;
-  eventTime: string;
-  producer: string;
+  eventId: string,
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
   payload: {
-    id: string;
-    title: string;
-    jiraId: string;
-    description: string;
-  };
-};
+    id: string,
+    title: string,
+    description: string,
+  }
+}
 type TaskCreatedEvent = {
-  eventId: string;
-  eventName: string;
-  eventVersion: number;
-  eventTime: string;
-  producer: string;
+  eventId: string,
+  eventName: string,
+  eventVersion: number,
+  eventTime: string,
+  producer: string,
   payload: {
     id: string;
     title: string;
@@ -105,7 +98,7 @@ type TaskCreatedEvent = {
 export class TaskAdapter implements OnModuleInit {
   readonly #logger = new Logger('TASK_TRACKER_SERVICE');
 
-  constructor(@Inject('TASK_TRACKER_SERVICE') readonly kafka: ClientKafka) {}
+  constructor(@Inject(KAKFA_CLIENT_SYMBOL) readonly kafka: ClientKafka) {}
 
   async onModuleInit() {
     await this.kafka.connect();
@@ -120,7 +113,6 @@ export class TaskAdapter implements OnModuleInit {
   }
 
   async createTask(message: TaskCreatedEvent): Promise<void> {
-
     const result = jsv.validate(message, SchemaTaskCreatedV2);
 
     if (result) {
